@@ -8,8 +8,6 @@ const path = require('path')
 const argv = require('minimist')(process.argv.slice(2), { string: ['_'] })
 // eslint-disable-next-line node/no-restricted-require
 const prompts = require('prompts')
-const FRAMEWORKS = require('./config')
-
 const {
   yellow,
   green,
@@ -19,6 +17,9 @@ const {
   lightRed,
   red
 } = require('kolorist')
+
+const FRAMEWORKS = require('./config')
+
 
 const cwd = process.cwd()
 
@@ -34,7 +35,7 @@ async function init() {
   let targetDir = argv._[0]
   let template = argv.template || argv.t
 
-  const defaultProjectName = !targetDir ? 'myapp' : targetDir
+  const defaultProjectName = !targetDir ? 'temp' : targetDir
 
   let result = {}
 
@@ -153,11 +154,11 @@ async function init() {
     write(file)
   }
 
-  const pkg = require(path.join(templateDir, `package.json`))
+  // const pkg = require(path.join(templateDir, `package.json`))
 
-  pkg.name = packageName || targetDir
+  // pkg.name = packageName || targetDir
 
-  write('package.json', JSON.stringify(pkg, null, 2))
+  // write('package.json', JSON.stringify(pkg, null, 2))
 
   const pkgInfo = pkgFromUserAgent(process.env.npm_config_user_agent)
   const pkgManager = pkgInfo ? pkgInfo.name : 'npm'

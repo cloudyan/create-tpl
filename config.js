@@ -1,15 +1,25 @@
+const {
+  yellow,
+  green,
+  cyan,
+  blue,
+  magenta,
+  lightRed,
+  red
+} = require('kolorist')
+
 module.exports = [
   {
-    name: 'vanilla',
-    color: yellow,
+    name: 'lint',
+    color: green,
     variants: [
       {
-        name: 'vanilla',
+        name: 'lint',
         display: 'JavaScript',
         color: yellow
       },
       {
-        name: 'vanilla-ts',
+        name: 'lint-ts',
         display: 'TypeScript',
         color: blue
       }
@@ -47,52 +57,4 @@ module.exports = [
       }
     ]
   },
-  {
-    name: 'preact',
-    color: magenta,
-    variants: [
-      {
-        name: 'preact',
-        display: 'JavaScript',
-        color: yellow
-      },
-      {
-        name: 'preact-ts',
-        display: 'TypeScript',
-        color: blue
-      }
-    ]
-  },
-  {
-    name: 'lit',
-    color: lightRed,
-    variants: [
-      {
-        name: 'lit',
-        display: 'JavaScript',
-        color: yellow
-      },
-      {
-        name: 'lit-ts',
-        display: 'TypeScript',
-        color: blue
-      }
-    ]
-  },
-  {
-    name: 'svelte',
-    color: red,
-    variants: [
-      {
-        name: 'svelte',
-        display: 'JavaScript',
-        color: yellow
-      },
-      {
-        name: 'svelte-ts',
-        display: 'TypeScript',
-        color: blue
-      }
-    ]
-  }
 ]
