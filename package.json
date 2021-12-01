@@ -12,8 +12,10 @@
   },
   "files": [
     "index.js",
-    "config.js",
-    "template-*"
+    "config/*",
+    "tpls/*",
+    "README.md",
+    "LICENSE"
   ],
   "main": "index.js",
   "scripts": {
