@@ -17,7 +17,7 @@
   ],
   "main": "index.js",
   "scripts": {
-    "pub": "np --no-cleanup --no-yarn --yolo --no-publish --any-branch --no-verify",
+    "prepublishOnly": "np --no-cleanup --no-yarn --yolo --no-publish --any-branch --no-verify",
     "debug": "export CREATE_DEBUG=false && node ./debug.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package create-tpl",
     "release": "node updateVersions"
