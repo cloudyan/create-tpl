@@ -2,6 +2,11 @@
 
 fork from [create-vite](https://github.com/vitejs/vite/tree/main/packages/create-vite)
 
+- [x] 支持更多的模板分类
+- [x] 支持当前文件夹生成 tpl 文件
+- [ ] 支持使用 npm@version 包内容作为模板(有版本的概念)
+- [ ] 支持类似 nrm 配置别名，方便复用指定模板
+
 ## Scaffolding Your First Vite Project
 
 > **Compatibility Note:**
