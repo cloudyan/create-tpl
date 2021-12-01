@@ -105,3 +105,4 @@ dist
 
 temp
 yarn.lock
+pnpm-lock.*

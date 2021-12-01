@@ -18,13 +18,23 @@ const {
   red
 } = require('kolorist')
 
-const FRAMEWORKS = require('./config')
-
+const tpls = require('./config');
 
 const cwd = process.cwd()
 
-const TEMPLATES = FRAMEWORKS.map(
-  (f) => (f.variants && f.variants.map((v) => v.name)) || [f.name]
+// tpl
+// tpl -> framework -> variant
+// 1 App Frameworks
+// 2 Block
+// 3 Code
+// 4 Plugin
+
+let TYPES = tpls.map(t => {
+  return [t.name];
+}).reduce((a, b) => a.concat(b), []);
+
+const TEMPLATES = tpls.map(
+  (f) => (f.list && f.list.map((v) => v.name)) || [f.name]
 ).reduce((a, b) => a.concat(b), [])
 
 const renameFiles = {
@@ -34,8 +44,10 @@ const renameFiles = {
 async function init() {
   let targetDir = argv._[0]
   let template = argv.template || argv.t
+  // Select the boilerplate type
+  let type = argv.type || argv.b
 
-  const defaultProjectName = !targetDir ? 'temp' : targetDir
+  const defaultProjectName = targetDir || 'temp'
 
   let result = {}
 
@@ -77,25 +89,43 @@ async function init() {
           validate: (dir) =>
             isValidPackageName(dir) || 'Invalid package.json name'
         },
+        // Select the boilerplate type
         {
-          type: template && TEMPLATES.includes(template) ? null : 'select',
+          type: type => type && TYPES.includes(type) ? null : 'select',
+          name: 'boilerplate',
+          message:
+            typeof type === 'string' && !TYPES.includes(type)
+              ? `"${type}" isn't a valid boilerplate type. Please choose from below: `
+              : 'Select the boilerplate type:',
+          initial: 0,
+          choices: tpls.map((boilerplate) => {
+            const boilerplateColor = boilerplate.color
+            return {
+              title: boilerplateColor(boilerplate.name),
+              value: boilerplate
+            }
+          })
+        },
+        {
+          // type: template && TEMPLATES.includes(template) ? null : 'select',
+          type: boilerplate => boilerplate && boilerplate.list ? 'select' : null,
           name: 'framework',
           message:
             typeof template === 'string' && !TEMPLATES.includes(template)
               ? `"${template}" isn't a valid template. Please choose from below: `
               : 'Select a framework:',
           initial: 0,
-          choices: FRAMEWORKS.map((framework) => {
-            const frameworkColor = framework.color
-            return {
-              title: frameworkColor(framework.name),
-              value: framework
-            }
-          })
+          choices: (boilerplate) =>
+            boilerplate.list.map((framework) => {
+              const frameworkColor = framework.color
+              return {
+                title: frameworkColor(framework.name),
+                value: framework
+              }
+            })
         },
         {
-          type: (framework) =>
-            framework && framework.variants ? 'select' : null,
+          type: framework => framework && framework.variants ? 'select' : null,
           name: 'variant',
           message: 'Select a variant:',
           // @ts-ignore
@@ -121,7 +151,7 @@ async function init() {
   }
 
   // user choice associated with prompts
-  const { framework, overwrite, packageName, variant } = result
+  const { boilerplate, framework, overwrite, packageName, variant } = result
 
   const root = path.join(cwd, targetDir)
 
@@ -136,7 +166,7 @@ async function init() {
 
   console.log(`\nScaffolding project in ${root}...`)
 
-  const templateDir = path.join(__dirname, `template-${template}`)
+  const templateDir = path.join(__dirname, `tpls/${boilerplate.name}/template-${template}`)
 
   const write = (file, content) => {
     const targetPath = renameFiles[file]
