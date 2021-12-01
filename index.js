@@ -219,13 +219,16 @@ function copy(src, dest) {
   }
 }
 
+// './' 为 false, '-' 为 true
 function isValidPackageName(projectName) {
   return /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(
     projectName
   )
 }
 
+// './' 转为 '-'
 function toValidPackageName(projectName) {
+  if (projectName === '.') return '-'; // FIXED: 支持在当前目录生成项目
   return projectName
     .trim()
     .toLowerCase()
