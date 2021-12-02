@@ -12,6 +12,7 @@ const AppList = [
   {
     name: 'vanilla',
     color: yellow,
+    type: 'app',
     variants: [
       {
         name: 'vanilla',
@@ -28,6 +29,7 @@ const AppList = [
   {
     name: 'vue',
     color: green,
+    type: 'app',
     variants: [
       {
         name: 'vue',
@@ -44,6 +46,7 @@ const AppList = [
   {
     name: 'react',
     color: cyan,
+    type: 'app',
     variants: [
       {
         name: 'react',
@@ -60,6 +63,7 @@ const AppList = [
   {
     name: 'preact',
     color: magenta,
+    type: 'app',
     variants: [
       {
         name: 'preact',
@@ -76,6 +80,7 @@ const AppList = [
   {
     name: 'lit',
     color: lightRed,
+    type: 'app',
     variants: [
       {
         name: 'lit',
@@ -92,6 +97,7 @@ const AppList = [
   {
     name: 'svelte',
     color: red,
+    type: 'app',
     variants: [
       {
         name: 'svelte',
@@ -111,6 +117,7 @@ const BlockList = [
   {
     name: 'lint',
     color: green,
+    type: 'block',
     variants: [
       {
         name: 'lint',

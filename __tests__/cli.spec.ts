@@ -26,7 +26,7 @@ const createNonEmptyDir = () => {
 }
 
 // Vue 3 starter template
-const templateFiles = readdirSync(join(CLI_PATH, 'template-vue'))
+const templateFiles = readdirSync(join(CLI_PATH, 'tpls', 'template-vue'))
   // _gitignore is renamed to .gitignore
   .map((filePath) => (filePath === '_gitignore' ? '.gitignore' : filePath))
   .sort()
@@ -39,21 +39,29 @@ test('prompts for the project name if none supplied', () => {
   expect(stdout).toContain('Project name:')
 })
 
+test('prompts for the boilerplate type if none supplied', () => {
+  const { stdout } = run([projectName])
+  expect(stdout).toContain('Select the boilerplate type:')
+})
+
 test('prompts for the framework if none supplied', () => {
   const { stdout } = run([projectName])
-  expect(stdout).toContain('Select a framework:')
+  expect(stdout).toContain('Select the boilerplate type:')
+  // expect(stdout).toContain('Select a framework:')
 })
 
 test('prompts for the framework on not supplying a value for --template', () => {
   const { stdout } = run([projectName, '--template'])
-  expect(stdout).toContain('Select a framework:')
+  expect(stdout).toContain('Select the boilerplate type:')
+  // expect(stdout).toContain('Select a framework:')
 })
 
 test('prompts for the framework on supplying an invalid template', () => {
   const { stdout } = run([projectName, '--template', 'unknown'])
-  expect(stdout).toContain(
-    `"unknown" isn't a valid template. Please choose from below:`
-  )
+  expect(stdout).toContain('Select the boilerplate type:')
+  // expect(stdout).toContain(
+  //   `"unknown" isn't a valid template. Please choose from below:`
+  // )
 })
 
 test('asks to overwrite non-empty target directory', () => {
@@ -68,8 +76,9 @@ test('asks to overwrite non-empty current directory', () => {
   expect(stdout).toContain(`Current directory is not empty.`)
 })
 
+// 参数全部输入的情况, 无需选择了, 这种流程需要完善
 test('successfully scaffolds a project based on vue starter template', () => {
-  const { stdout } = run([projectName, '--template', 'vue'], {
+  const { stdout } = run([projectName, '-b', 'app', '--template', 'vue'], {
     cwd: __dirname
   })
   const generatedFiles = readdirSync(genPath).sort()
@@ -80,7 +89,7 @@ test('successfully scaffolds a project based on vue starter template', () => {
 })
 
 test('works with the -t alias', () => {
-  const { stdout } = run([projectName, '-t', 'vue'], {
+  const { stdout } = run([projectName, '-b', 'app', '-t', 'vue'], {
     cwd: __dirname
   })
   const generatedFiles = readdirSync(genPath).sort()

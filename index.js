@@ -35,7 +35,9 @@ let TYPES = tpls.map(t => {
 
 const TEMPLATES = tpls.map(
   (f) => (f.list && f.list.map((v) => v.name)) || [f.name]
-).reduce((a, b) => a.concat(b), [])
+).reduce((a, b) => a.concat(b), []);
+let FRAMEWORKS = [];
+
 
 const renameFiles = {
   _gitignore: '.gitignore'
@@ -45,7 +47,11 @@ async function init() {
   let targetDir = argv._[0]
   let template = argv.template || argv.t
   // Select the boilerplate type
-  let type = argv.type || argv.b
+  let boilerplateType = argv.boilerplate || argv.b
+
+  if (!template && boilerplateType && TYPES.includes(boilerplateType)) {
+    FRAMEWORKS = toValidBoilerplate(boilerplateType).list;
+  }
 
   const defaultProjectName = targetDir || 'temp'
 
@@ -75,7 +81,10 @@ async function init() {
         {
           type: (_, { overwrite } = {}) => {
             if (overwrite === false) {
-              throw new Error(red('✖') + ' Operation cancelled')
+              if (!['.', './'].includes(targetDir)) {
+                throw new Error(red('✖') + ' Operation cancelled')
+              }
+              return null
             }
             return null
           },
@@ -91,41 +100,52 @@ async function init() {
         },
         // Select the boilerplate type
         {
-          type: type => type && TYPES.includes(type) ? null : 'select',
+          type: (_) => {
+            // console.log('boilerplateType', boilerplateType);
+            if (template && TEMPLATES.includes(template)) return null;
+            return boilerplateType && TYPES.includes(boilerplateType) ? null : 'select'
+          },
           name: 'boilerplate',
           message:
-            typeof type === 'string' && !TYPES.includes(type)
-              ? `"${type}" isn't a valid boilerplate type. Please choose from below: `
+            typeof boilerplateType === 'string' && !TYPES.includes(boilerplateType)
+              ? `"${boilerplateType}" isn't a valid boilerplate type. Please choose from below: `
               : 'Select the boilerplate type:',
-          initial: 0,
+          initial: () => toValidBoilerplate(boilerplateType),
+          // initial: 0,
           choices: tpls.map((boilerplate) => {
-            const boilerplateColor = boilerplate.color
+            const boilerplateColor = boilerplate.color;
             return {
               title: boilerplateColor(boilerplate.name),
               value: boilerplate
             }
-          })
+          }),
         },
         {
           // type: template && TEMPLATES.includes(template) ? null : 'select',
-          type: boilerplate => boilerplate && boilerplate.list ? 'select' : null,
+          type: (_, { boilerplate }) => {
+            // console.log('boilerplate', _, boilerplate);
+            if (template && TEMPLATES.includes(template)) return null;
+            return 'select'; // boilerplate && boilerplate.list ? 'select' : null;
+          },
           name: 'framework',
           message:
             typeof template === 'string' && !TEMPLATES.includes(template)
               ? `"${template}" isn't a valid template. Please choose from below: `
               : 'Select a framework:',
           initial: 0,
-          choices: (boilerplate) =>
-            boilerplate.list.map((framework) => {
+          choices: (boilerplate) => {
+            return (boilerplate?.list || FRAMEWORKS).map((framework) => {
               const frameworkColor = framework.color
               return {
                 title: frameworkColor(framework.name),
                 value: framework
               }
             })
+          },
         },
         {
-          type: framework => framework && framework.variants ? 'select' : null,
+          type: (framework) =>
+            framework && framework.variants ? 'select' : null,
           name: 'variant',
           message: 'Select a variant:',
           // @ts-ignore
@@ -164,9 +184,10 @@ async function init() {
   // determine template
   template = variant || framework || template
 
+  // console.log('result', boilerplateType, template, result);
   console.log(`\nScaffolding project in ${root}...`)
 
-  const templateDir = path.join(__dirname, `tpls/${boilerplate.name}/template-${template}`)
+  const templateDir = path.join(__dirname, `tpls/template-${template}`)
 
   const write = (file, content) => {
     const targetPath = renameFiles[file]
@@ -184,11 +205,15 @@ async function init() {
     write(file)
   }
 
-  // const pkg = require(path.join(templateDir, `package.json`))
+  // 覆写 package.json 做存在性检测
+  const pkgTpl = path.join(templateDir, `package.json`);
+  if (fs.existsSync(pkgTpl)) {
+    const pkg = require(path.join(templateDir, `package.json`))
 
-  // pkg.name = packageName || targetDir
+    pkg.name = packageName || targetDir
 
-  // write('package.json', JSON.stringify(pkg, null, 2))
+    write('package.json', JSON.stringify(pkg, null, 2))
+  }
 
   const pkgInfo = pkgFromUserAgent(process.env.npm_config_user_agent)
   const pkgManager = pkgInfo ? pkgInfo.name : 'npm'
@@ -224,6 +249,12 @@ function isValidPackageName(projectName) {
   return /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/.test(
     projectName
   )
+}
+
+function toValidBoilerplate(type) {
+  const boilerplate = tpls.find(item => item.name === type) || 0;
+  // console.log('toValidBoilerplate', type, boilerplate);
+  return boilerplate;
 }
 
 // './' 转为 '-'
