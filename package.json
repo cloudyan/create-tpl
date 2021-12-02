@@ -24,6 +24,7 @@
     "debug": "export CREATE_DEBUG=false && node ./debug.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package create-tpl",
     "test": "jest",
+    "down": "node ./download.js",
     "release": "node updateVersions"
   },
   "engines": {
