@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
+const pkg = require('./package.json')
 // const latestVersion = require('../vite/package.json').version
+const latestVersion = pkg.version
 const isLatestPreRelease = /beta|alpha|rc/.test(latestVersion)
 
 ;(async () => {
