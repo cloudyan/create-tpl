@@ -116,7 +116,7 @@ const AppList = [
 const BlockList = [
   {
     name: 'lint',
-    color: green,
+    color: yellow,
     type: 'block',
     variants: [
       {
@@ -129,6 +129,30 @@ const BlockList = [
         display: 'TypeScript',
         color: blue
       }
+    ]
+  },
+  {
+    name: 'lock',
+    color: green,
+    type: 'block',
+    variants: [
+      {
+        name: 'lock',
+        display: 'JavaScript',
+        color: yellow
+      },
+    ]
+  },
+  {
+    name: 'sca',
+    color: blue,
+    type: 'block',
+    variants: [
+      {
+        name: 'sca',
+        display: 'JavaScript',
+        color: yellow
+      },
     ]
   },
 ];
