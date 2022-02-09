@@ -1,0 +1,34 @@
+# Browserslist’s default browsers (> 0.5%, last 2 versions, Firefox ESR, not dead).
+# https://github.com/browserslist/browserslist#full-list
+defaults
+
+# toke queries from browserslist-config-mycompany npm package.
+# extends browserslist-config-mycompany
+
+# browsers versions selected by global usage statistics, >=, < and <= work too.
+[modern]
+> 5%
+# uses custom usage data.
+# > 5% in my stats
+# uses custom usage data from browserslist-config-mycompany/browserslist-stats.json.
+# > 5% in browserslist-config-mycompany stats
+
+# most popular browsers that provide coverage.
+[production]
+cover 99.5%
+
+# browsers without official support or updatee for 24 months.
+# node dead
+last 2 versions
+iOS 7
+android >= 4.4
+ie >= 10
+
+
+# selects latest Node.js release
+[ssr]
+# 12.x.x
+# node 12
+current node
+# all Node.js version, which are still maintained by Node.js Foundation.
+maintained node versions
