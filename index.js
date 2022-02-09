@@ -43,6 +43,12 @@ const renameFiles = {
   _gitignore: '.gitignore'
 }
 
+// 分步骤
+// 1. Project name:
+// 2. overwrite Checker
+// 3. Select the boilerplate type:
+// 4. Select a framework:
+// 5. Select a variant:
 async function init() {
   let targetDir = argv._[0]
   let template = argv.template || argv.t
