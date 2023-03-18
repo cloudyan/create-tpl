@@ -8,7 +8,7 @@ const {
   red
 } = require('kolorist')
 
-const AppList = [
+const TemplateList = [
   {
     name: 'vanilla',
     color: yellow,
@@ -110,10 +110,7 @@ const AppList = [
         color: blue
       }
     ]
-  }
-];
-
-const BlockList = [
+  },
   {
     name: 'lint',
     color: yellow,
@@ -157,26 +154,5 @@ const BlockList = [
   },
 ];
 
-module.exports = [
-  {
-    name: 'app',
-    color: green,
-    list: AppList,
-  },
-  {
-    name: 'block',
-    color: yellow,
-    list: BlockList,
-  },
-  // {
-  //   name: 'code',
-  //   color: cyan,
-  //   list: CodeList,
-  // },
-  // {
-  //   name: 'plugin',
-  //   color: blue,
-  //   list: PluginList,
-  // },
-];
+module.exports = TemplateList
 

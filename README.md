@@ -1,23 +1,29 @@
 # create-tpl
 
-fork from [create-vite](https://github.com/vitejs/vite/tree/main/packages/create-vite)
+参考：
 
-- [x] 支持更多的模板分类 app block
+- 1. [create-vite](https://github.com/vitejs/vite/tree/main/packages/create-vite)
+- 2. [degit](https://github.com/Rich-Harris/degit)
+- 3. [umi 微生成器](https://umijs.org/docs/guides/generator)
+- 4. 更多模板 [awesome-vite](https://github.com/vitejs/awesome-vite)
+
+## 功能特性
+
+- [x] 默认使用 pnpm
 - [x] 支持当前文件夹生成 tpl 文件(命名覆盖, 非同名附加)
-- [ ] 支持使用 npm@version 包内容作为模板(有版本的概念)
-- [ ] 支持类似 nrm 配置别名，方便复用指定模板
-- [ ] 支持 package.json merge 形式混入配置(可选是否混入)
-- [ ] 支持简单模版变量替换 比如新增页面或 model
+- [ ] 支持更多的模板
+- [ ] 支持微生成器，如： page,model,eslint,prettier,commitlint 等
+- [ ] 支持对模板内容进行自定义 --inject
 
 ## Scaffolding Your First Vite Project
 
 > **Compatibility Note:**
-> Vite requires [Node.js](https://nodejs.org/en/) version >=12.0.0.
+> Vite requires [Node.js](https://nodejs.org/en/) version 14.18+, 16+. However, some templates require a higher Node.js version to work, please upgrade if your package manager warns about it.
 
 With NPM:
 
 ```bash
-$ npm init vite@latest
+$ npm create vite@latest
 ```
 
 With Yarn:
@@ -38,16 +44,16 @@ You can also directly specify the project name and the template you want to use 
 
 ```bash
 # npm 6.x
-npm init vite@latest my-vue-app --template vue
+npm create vite@latest my-vue-app --template vue
 
 # npm 7+, extra double-dash is needed:
-npm init vite@latest my-vue-app -- --template vue
+npm create vite@latest my-vue-app -- --template vue
 
 # yarn
 yarn create vite my-vue-app --template vue
 
 # pnpm
-pnpm create vite my-vue-app -- --template vue
+pnpm create vite my-vue-app --template vue
 ```
 
 Currently supported template presets include:
@@ -58,12 +64,16 @@ Currently supported template presets include:
 - `vue-ts`
 - `react`
 - `react-ts`
+- `react-swc`
+- `react-swc-ts`
 - `preact`
 - `preact-ts`
 - `lit`
 - `lit-ts`
 - `svelte`
 - `svelte-ts`
+
+You can use `.` for the project name to scaffold in the current directory.
 
 ## Community Templates
 

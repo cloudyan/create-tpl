@@ -1,67 +1,67 @@
-/* eslint-disable node/no-extraneous-import */
-import { commandSync, ExecaSyncReturnValue, SyncOptions } from 'execa'
-import { mkdirpSync, readdirSync, remove, writeFileSync } from 'fs-extra'
-import { join } from 'path'
+import { join } from 'node:path'
+import type { ExecaSyncReturnValue, SyncOptions } from 'execa'
+import { execaCommandSync } from 'execa'
+import fs from 'fs-extra'
+import { afterEach, beforeAll, expect, test } from 'vitest'
 
-const CLI_PATH = join(__dirname, '..')
+const CLI_PATH = join(__dirname, '../')
 
 const projectName = 'test-app'
 const genPath = join(__dirname, projectName)
 
 const run = (
   args: string[],
-  options: SyncOptions<string> = {}
-): ExecaSyncReturnValue<string> => {
-  return commandSync(`node ${CLI_PATH} ${args.join(' ')}`, options)
+  options: SyncOptions = {},
+): ExecaSyncReturnValue => {
+  return execaCommandSync(`node ${CLI_PATH} ${args.join(' ')}`, options)
 }
 
 // Helper to create a non-empty directory
 const createNonEmptyDir = () => {
   // Create the temporary directory
-  mkdirpSync(genPath)
+  fs.mkdirpSync(genPath)
 
   // Create a package.json file
   const pkgJson = join(genPath, 'package.json')
-  writeFileSync(pkgJson, '{ "foo": "bar" }')
+  fs.writeFileSync(pkgJson, '{ "foo": "bar" }')
 }
 
 // Vue 3 starter template
-const templateFiles = readdirSync(join(CLI_PATH, 'tpls', 'template-vue'))
+const templateFiles = fs
+  .readdirSync(join(CLI_PATH, 'tpls', 'template-vue'))
   // _gitignore is renamed to .gitignore
   .map((filePath) => (filePath === '_gitignore' ? '.gitignore' : filePath))
   .sort()
 
-beforeAll(() => remove(genPath))
-afterEach(() => remove(genPath))
+beforeAll(() => fs.remove(genPath))
+afterEach(() => fs.remove(genPath))
 
 test('prompts for the project name if none supplied', () => {
-  const { stdout, exitCode } = run([])
+  const { stdout } = run([])
   expect(stdout).toContain('Project name:')
 })
 
-test('prompts for the boilerplate type if none supplied', () => {
-  const { stdout } = run([projectName])
-  expect(stdout).toContain('Select the boilerplate type:')
+test('prompts for the framework if none supplied when target dir is current directory', () => {
+  fs.mkdirpSync(genPath)
+  const { stdout } = run(['.'], { cwd: genPath })
+  expect(stdout).toContain('Select a framework:')
 })
 
 test('prompts for the framework if none supplied', () => {
   const { stdout } = run([projectName])
-  expect(stdout).toContain('Select the boilerplate type:')
-  // expect(stdout).toContain('Select a framework:')
+  expect(stdout).toContain('Select a framework:')
 })
 
 test('prompts for the framework on not supplying a value for --template', () => {
   const { stdout } = run([projectName, '--template'])
-  expect(stdout).toContain('Select the boilerplate type:')
-  // expect(stdout).toContain('Select a framework:')
+  expect(stdout).toContain('Select a framework:')
 })
 
 test('prompts for the framework on supplying an invalid template', () => {
   const { stdout } = run([projectName, '--template', 'unknown'])
-  expect(stdout).toContain('Select the boilerplate type:')
-  // expect(stdout).toContain(
-  //   `"unknown" isn't a valid template. Please choose from below:`
-  // )
+  expect(stdout).toContain(
+    `"unknown" isn't a valid template. Please choose from below:`,
+  )
 })
 
 test('asks to overwrite non-empty target directory', () => {
@@ -72,16 +72,15 @@ test('asks to overwrite non-empty target directory', () => {
 
 test('asks to overwrite non-empty current directory', () => {
   createNonEmptyDir()
-  const { stdout } = run(['.'], { cwd: genPath, input: 'test-app\n' })
+  const { stdout } = run(['.'], { cwd: genPath })
   expect(stdout).toContain(`Current directory is not empty.`)
 })
 
-// 参数全部输入的情况, 无需选择了, 这种流程需要完善
 test('successfully scaffolds a project based on vue starter template', () => {
-  const { stdout } = run([projectName, '-b', 'app', '--template', 'vue'], {
-    cwd: __dirname
+  const { stdout } = run([projectName, '--template', 'vue'], {
+    cwd: __dirname,
   })
-  const generatedFiles = readdirSync(genPath).sort()
+  const generatedFiles = fs.readdirSync(genPath).sort()
 
   // Assertions
   expect(stdout).toContain(`Scaffolding project in ${genPath}`)
@@ -89,10 +88,10 @@ test('successfully scaffolds a project based on vue starter template', () => {
 })
 
 test('works with the -t alias', () => {
-  const { stdout } = run([projectName, '-b', 'app', '-t', 'vue'], {
-    cwd: __dirname
+  const { stdout } = run([projectName, '-t', 'vue'], {
+    cwd: __dirname,
   })
-  const generatedFiles = readdirSync(genPath).sort()
+  const generatedFiles = fs.readdirSync(genPath).sort()
 
   // Assertions
   expect(stdout).toContain(`Scaffolding project in ${genPath}`)
