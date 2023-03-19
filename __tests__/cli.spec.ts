@@ -28,7 +28,7 @@ const createNonEmptyDir = () => {
 
 // Vue 3 starter template
 const templateFiles = fs
-  .readdirSync(join(CLI_PATH, 'templates', 'app-vue'))
+  .readdirSync(join(CLI_PATH, 'templates', 'project-vue'))
   // _gitignore is renamed to .gitignore
   .map((filePath) => (filePath === '_gitignore' ? '.gitignore' : filePath))
   .sort()
@@ -77,7 +77,7 @@ test('asks to overwrite non-empty current directory', () => {
 })
 
 test('successfully scaffolds a project based on vue starter template', () => {
-  const { stdout } = run([projectName, '--template', 'app-vue'], {
+  const { stdout } = run([projectName, '--template', 'vue'], {
     cwd: __dirname,
   })
   const generatedFiles = fs.readdirSync(genPath).sort()
@@ -88,7 +88,7 @@ test('successfully scaffolds a project based on vue starter template', () => {
 })
 
 test('works with the -t alias', () => {
-  const { stdout } = run([projectName, '-t', 'app-vue'], {
+  const { stdout } = run([projectName, '-t', 'vue'], {
     cwd: __dirname,
   })
   const generatedFiles = fs.readdirSync(genPath).sort()

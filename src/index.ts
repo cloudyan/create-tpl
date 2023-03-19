@@ -47,7 +47,15 @@ const defaultTargetDir = 'temp-project'
 
 async function init() {
   const argTargetDir = formatTargetDir(argv._[0])
-  const argTemplate = argv.template || argv.t
+  let argTemplate = argv.template || argv.t
+  let fixedTemplate
+  if (argTemplate) {
+    if (TemplateMaps[argTemplate]) {
+      fixedTemplate = argTemplate
+    } else if (TemplateMaps[`project-${argTemplate}`]) {
+      fixedTemplate = `project-${argTemplate}`
+    }
+  }
 
   let targetDir = argTargetDir || defaultTargetDir
   const getProjectName = () =>
@@ -102,11 +110,9 @@ async function init() {
             isValidPackageName(dir) || 'Invalid package.json name',
         },
         {
-          type:
-            argTemplate && TemplateKeys.includes(argTemplate) ? null : 'select',
+          type: fixedTemplate ? null : 'select',
           name: 'selectTemplate',
-          message:
-            typeof argTemplate === 'string' && !TemplateKeys.includes(argTemplate)
+          message: typeof argTemplate === 'string' && !fixedTemplate
               ? reset(
                   `"${argTemplate}" isn't a valid template. Please choose from below: `,
                 )
@@ -139,14 +145,17 @@ async function init() {
 
   const root = path.join(cwd, targetDir)
 
-  if (overwrite) {
+  // determine template
+  let template: string = selectTemplate?.name || argTemplate
+  if (!TemplateMaps[template] && TemplateMaps[`project-${template}`]) {
+    template = `project-${template}`
+  }
+
+  if (overwrite && template.startsWith('project-')) {
     emptyDir(root)
   } else if (!fs.existsSync(root)) {
     fs.mkdirSync(root, { recursive: true })
   }
-
-  // determine template
-  let template: string = selectTemplate?.name || argTemplate
 
   const pkgInfo = pkgFromUserAgent(process.env.npm_config_user_agent)
   const pkgManager = pkgInfo ? pkgInfo.name : 'npm'

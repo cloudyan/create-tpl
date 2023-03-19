@@ -20,14 +20,14 @@ export type Template = {
 
 export const TemplateList: Template[] = [
   {
-    type: 'app',
-    name: 'app-vue',
+    type: 'project',
+    name: 'project-vue',
     display: 'vue',
     color: green,
   },
   {
-    type: 'app',
-    name: 'app-vue-ts',
+    type: 'project',
+    name: 'project-vue-ts',
     display: 'Vue-ts',
     color: blue,
   },
