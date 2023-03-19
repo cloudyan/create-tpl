@@ -70,8 +70,10 @@ async function init() {
           },
         },
         {
-          type: () =>
-            !fs.existsSync(targetDir) || isEmpty(targetDir) ? null : 'confirm',
+          type: () => {
+            // 覆盖参数是针对目标路径的
+            return !fs.existsSync(targetDir) || isEmpty(targetDir) ? null : 'confirm'
+          },
           name: 'overwrite',
           message: () =>
             (targetDir === '.'
@@ -82,7 +84,10 @@ async function init() {
         {
           type: (_, { overwrite }: { overwrite?: boolean }) => {
             if (overwrite === false) {
-              throw new Error(red('✖') + ' Operation cancelled')
+              if (!['.', './'].includes(targetDir)) {
+                throw new Error(red('✖') + ' Operation cancelled')
+              }
+              return null
             }
             return null
           },
@@ -181,7 +186,7 @@ async function init() {
   const templateDir = path.resolve(
     fileURLToPath(import.meta.url),
     '../..',
-    `tpls/template-${template}`,
+    `templates/${template}`,
   )
 
   const write = (file: string, content?: string) => {
@@ -198,12 +203,10 @@ async function init() {
     write(file)
   }
 
-  // 如果存在 package.json 才处理这个
+  // 覆写 package.json 做存在性检测
+  // 不存在此文件，不应该清空当前目录
   const pgkFilePath = path.join(templateDir, `package.json`)
-  const pgkExists = fs.existsSync(pgkFilePath)
-  // console.log(stat.isFile())
-  // return;
-  if (pgkExists) {
+  if (fs.existsSync(pgkFilePath)) {
     const pkg = JSON.parse(
       fs.readFileSync(pgkFilePath, 'utf-8'),
     )
