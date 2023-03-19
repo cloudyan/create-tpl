@@ -15,6 +15,8 @@ import {
   reset,
   yellow,
 } from 'kolorist'
+import { TemplateList } from './config'
+import type { Template } from './config'
 
 // Avoids autoconversion to number of the project name by defining that the args
 // non associated with an option ( _ ) needs to be parsed as a string. See #4606
@@ -24,173 +26,22 @@ const argv = minimist<{
 }>(process.argv.slice(2), { string: ['_'] })
 const cwd = process.cwd()
 
-type ColorFunc = (str: string | number) => string
-type Framework = {
-  name: string
-  display: string
-  color: ColorFunc
-  variants: FrameworkVariant[]
-}
-type FrameworkVariant = {
-  name: string
-  display: string
-  color: ColorFunc
-  customCommand?: string
-}
+const TemplateMaps = TemplateList.reduce((obj: any, item) => {
+  const templateName = item.name;
+  obj[templateName] = item;
+  return obj
+}, {})
+const TemplateKeys = Object.keys(TemplateMaps)
 
-const FRAMEWORKS: Framework[] = [
-  {
-    name: 'vanilla',
-    display: 'Vanilla',
-    color: yellow,
-    variants: [
-      {
-        name: 'vanilla',
-        display: 'JavaScript',
-        color: yellow,
-      },
-      {
-        name: 'vanilla-ts',
-        display: 'TypeScript',
-        color: blue,
-      },
-    ],
-  },
-  {
-    name: 'vue',
-    display: 'Vue',
-    color: green,
-    variants: [
-      {
-        name: 'vue',
-        display: 'JavaScript',
-        color: yellow,
-      },
-      {
-        name: 'vue-ts',
-        display: 'TypeScript',
-        color: blue,
-      },
-      {
-        name: 'custom-create-vue',
-        display: 'Customize with create-vue ↗',
-        color: green,
-        customCommand: 'npm create vue@latest TARGET_DIR',
-      },
-      {
-        name: 'custom-nuxt',
-        display: 'Nuxt ↗',
-        color: lightGreen,
-        customCommand: 'npm exec nuxi init TARGET_DIR',
-      },
-    ],
-  },
-  {
-    name: 'react',
-    display: 'React',
-    color: cyan,
-    variants: [
-      {
-        name: 'react',
-        display: 'JavaScript',
-        color: yellow,
-      },
-      {
-        name: 'react-ts',
-        display: 'TypeScript',
-        color: blue,
-      },
-      {
-        name: 'react-swc',
-        display: 'JavaScript + SWC',
-        color: yellow,
-      },
-      {
-        name: 'react-swc-ts',
-        display: 'TypeScript + SWC',
-        color: blue,
-      },
-    ],
-  },
-  {
-    name: 'preact',
-    display: 'Preact',
-    color: magenta,
-    variants: [
-      {
-        name: 'preact',
-        display: 'JavaScript',
-        color: yellow,
-      },
-      {
-        name: 'preact-ts',
-        display: 'TypeScript',
-        color: blue,
-      },
-    ],
-  },
-  {
-    name: 'lit',
-    display: 'Lit',
-    color: lightRed,
-    variants: [
-      {
-        name: 'lit',
-        display: 'JavaScript',
-        color: yellow,
-      },
-      {
-        name: 'lit-ts',
-        display: 'TypeScript',
-        color: blue,
-      },
-    ],
-  },
-  {
-    name: 'svelte',
-    display: 'Svelte',
-    color: red,
-    variants: [
-      {
-        name: 'svelte',
-        display: 'JavaScript',
-        color: yellow,
-      },
-      {
-        name: 'svelte-ts',
-        display: 'TypeScript',
-        color: blue,
-      },
-      {
-        name: 'custom-svelte-kit',
-        display: 'SvelteKit ↗',
-        color: red,
-        customCommand: 'npm create svelte@latest TARGET_DIR',
-      },
-    ],
-  },
-  {
-    name: 'others',
-    display: 'Others',
-    color: reset,
-    variants: [
-      {
-        name: 'create-vite-extra',
-        display: 'create-vite-extra ↗',
-        color: reset,
-        customCommand: 'npm create vite-extra@latest TARGET_DIR',
-      },
-    ],
-  },
-]
-
-const TEMPLATES = FRAMEWORKS.map(
-  (f) => (f.variants && f.variants.map((v) => v.name)) || [f.name],
-).reduce((a, b) => a.concat(b), [])
 
 const renameFiles: Record<string, string | undefined> = {
   _gitignore: '.gitignore',
 }
+
+console.log('TEMPLATES', TemplateMaps)
+
+// TemplateList
+// TemplateListKeys
 
 const defaultTargetDir = 'temp-project'
 
@@ -203,7 +54,7 @@ async function init() {
     targetDir === '.' ? path.basename(path.resolve()) : targetDir
 
   let result: prompts.Answers<
-    'projectName' | 'overwrite' | 'packageName' | 'framework' | 'variant'
+    'projectName' | 'overwrite' | 'packageName' | 'selectTemplate'
   >
 
   try {
@@ -214,7 +65,7 @@ async function init() {
           name: 'projectName',
           message: reset('Project name:'),
           initial: defaultTargetDir,
-          onState: (state) => {
+          onState: (state: any) => {
             targetDir = formatTargetDir(state.value) || defaultTargetDir
           },
         },
@@ -242,41 +93,28 @@ async function init() {
           name: 'packageName',
           message: reset('Package name:'),
           initial: () => toValidPackageName(getProjectName()),
-          validate: (dir) =>
+          validate: (dir: string) =>
             isValidPackageName(dir) || 'Invalid package.json name',
         },
         {
           type:
-            argTemplate && TEMPLATES.includes(argTemplate) ? null : 'select',
-          name: 'framework',
+            argTemplate && TemplateKeys.includes(argTemplate) ? null : 'select',
+          name: 'selectTemplate',
           message:
-            typeof argTemplate === 'string' && !TEMPLATES.includes(argTemplate)
+            typeof argTemplate === 'string' && !TemplateKeys.includes(argTemplate)
               ? reset(
                   `"${argTemplate}" isn't a valid template. Please choose from below: `,
                 )
-              : reset('Select a framework:'),
+              : reset('Select a template:'),
           initial: 0,
-          choices: FRAMEWORKS.map((framework) => {
-            const frameworkColor = framework.color
+          choices: TemplateKeys.map((key: string) => {
+            const temp = TemplateMaps[key]
+            const templateColor = temp.color
             return {
-              title: frameworkColor(framework.display || framework.name),
-              value: framework,
+              title: templateColor(temp.display || temp.name),
+              value: temp,
             }
           }),
-        },
-        {
-          type: (framework: Framework) =>
-            framework && framework.variants ? 'select' : null,
-          name: 'variant',
-          message: reset('Select a variant:'),
-          choices: (framework: Framework) =>
-            framework.variants.map((variant) => {
-              const variantColor = variant.color
-              return {
-                title: variantColor(variant.display || variant.name),
-                value: variant.name,
-              }
-            }),
         },
       ],
       {
@@ -291,7 +129,8 @@ async function init() {
   }
 
   // user choice associated with prompts
-  const { framework, overwrite, packageName, variant } = result
+  console.log('choice', result)
+  const { selectTemplate, overwrite, packageName } = result
 
   const root = path.join(cwd, targetDir)
 
@@ -302,19 +141,13 @@ async function init() {
   }
 
   // determine template
-  let template: string = variant || framework?.name || argTemplate
-  let isReactSwc = false
-  if (template.includes('-swc')) {
-    isReactSwc = true
-    template = template.replace('-swc', '')
-  }
+  let template: string = selectTemplate?.name || argTemplate
 
   const pkgInfo = pkgFromUserAgent(process.env.npm_config_user_agent)
   const pkgManager = pkgInfo ? pkgInfo.name : 'npm'
   const isYarn1 = pkgManager === 'yarn' && pkgInfo?.version.startsWith('1.')
 
-  const { customCommand } =
-    FRAMEWORKS.flatMap((f) => f.variants).find((v) => v.name === template) ?? {}
+  const { customCommand } = TemplateMaps[template] ?? {}
 
   if (customCommand) {
     const fullCustomCommand = customCommand
@@ -373,9 +206,9 @@ async function init() {
 
   write('package.json', JSON.stringify(pkg, null, 2) + '\n')
 
-  if (isReactSwc) {
-    setupReactSwc(root, template.endsWith('-ts'))
-  }
+  // if (isReactSwc) {
+  //   setupReactSwc(root, template.endsWith('-ts'))
+  // }
 
   const cdProjectName = path.relative(cwd, root)
   console.log(`\nDone. Now run:\n`)

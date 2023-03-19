@@ -41,20 +41,20 @@ test('prompts for the project name if none supplied', () => {
   expect(stdout).toContain('Project name:')
 })
 
-test('prompts for the framework if none supplied when target dir is current directory', () => {
+test('prompts for the template if none supplied when target dir is current directory', () => {
   fs.mkdirpSync(genPath)
   const { stdout } = run(['.'], { cwd: genPath })
-  expect(stdout).toContain('Select a framework:')
+  expect(stdout).toContain('Select a template:')
 })
 
-test('prompts for the framework if none supplied', () => {
+test('prompts for the template if none supplied', () => {
   const { stdout } = run([projectName])
-  expect(stdout).toContain('Select a framework:')
+  expect(stdout).toContain('Select a template:')
 })
 
-test('prompts for the framework on not supplying a value for --template', () => {
+test('prompts for the template on not supplying a value for --template', () => {
   const { stdout } = run([projectName, '--template'])
-  expect(stdout).toContain('Select a framework:')
+  expect(stdout).toContain('Select a template:')
 })
 
 test('prompts for the framework on supplying an invalid template', () => {

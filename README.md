@@ -11,6 +11,7 @@
 
 - [x] 默认使用 pnpm
 - [x] 支持当前文件夹生成 tpl 文件(命名覆盖, 非同名附加)
+- [ ] 一个模板一个路径，没有层级关系
 - [ ] 支持更多的模板
 - [ ] 支持微生成器，如： page,model,eslint,prettier,commitlint 等
 - [ ] 支持对模板内容进行自定义 --inject
