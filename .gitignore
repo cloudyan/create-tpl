@@ -106,4 +106,3 @@ dist
 examples
 temp
 yarn.lock
-pnpm-lock.*
