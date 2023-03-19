@@ -1,4 +1,4 @@
-const {
+import {
   yellow,
   reset,
   green,
@@ -7,7 +7,7 @@ const {
   magenta,
   lightRed,
   red
-} = require('kolorist')
+} from 'kolorist'
 
 type ColorFunc = (str: string | number) => string
 export type Template = {
