@@ -21,18 +21,6 @@ export type Template = {
 export const TemplateList: Template[] = [
   {
     type: 'app',
-    name: 'vanilla',
-    display: 'vanilla',
-    color: yellow,
-  },
-  {
-    type: 'app',
-    name: 'vanilla-ts',
-    display: 'vanilla-ts',
-    color: blue
-  },
-  {
-    type: 'app',
     name: 'vue',
     display: 'vue',
     color: green,
