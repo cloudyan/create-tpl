@@ -198,13 +198,19 @@ async function init() {
     write(file)
   }
 
-  const pkg = JSON.parse(
-    fs.readFileSync(path.join(templateDir, `package.json`), 'utf-8'),
-  )
+  // 如果存在 package.json 才处理这个
+  const pgkFilePath = path.join(templateDir, `package.json`)
+  const pgkExists = fs.existsSync(pgkFilePath)
+  // console.log(stat.isFile())
+  // return;
+  if (pgkExists) {
+    const pkg = JSON.parse(
+      fs.readFileSync(pgkFilePath, 'utf-8'),
+    )
+    pkg.name = packageName || getProjectName()
 
-  pkg.name = packageName || getProjectName()
-
-  write('package.json', JSON.stringify(pkg, null, 2) + '\n')
+    write('package.json', JSON.stringify(pkg, null, 2) + '\n')
+  }
 
   // if (isReactSwc) {
   //   setupReactSwc(root, template.endsWith('-ts'))
