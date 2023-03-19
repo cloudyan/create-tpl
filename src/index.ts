@@ -38,7 +38,7 @@ const renameFiles: Record<string, string | undefined> = {
   _gitignore: '.gitignore',
 }
 
-console.log('TEMPLATES', TemplateMaps)
+// console.log('TEMPLATES', TemplateMaps)
 
 // TemplateList
 // TemplateListKeys
@@ -129,7 +129,7 @@ async function init() {
   }
 
   // user choice associated with prompts
-  console.log('choice', result)
+  // console.log('choice', result)
   const { selectTemplate, overwrite, packageName } = result
 
   const root = path.join(cwd, targetDir)
