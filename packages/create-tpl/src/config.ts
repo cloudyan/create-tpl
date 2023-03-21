@@ -45,7 +45,13 @@ export const TemplateList: Template[] = [
   },
   {
     name: 'md-source-code-analysis',
-    display: 'Sca',
+    display: 'md-source-code-analysis',
+    color: yellow,
+    type: 'block',
+  },
+  {
+    name: 'monorepo-by-lerna-pnpm',
+    display: 'monorepo-by-lerna-pnpm',
     color: blue,
     type: 'block',
   },

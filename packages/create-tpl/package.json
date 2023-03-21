@@ -1,0 +1,55 @@
+{
+  "name": "create-tpl",
+  "version": "0.1.1",
+  "type": "module",
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "bin": {
+    "create-tpl": "index.js",
+    "cta": "index.js"
+  },
+  "files": [
+    "dist",
+    "templates/*",
+    "index.js"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "unbuild --stub",
+    "build": "unbuild",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "test": "run-s test-unit",
+    "test-unit": "vitest run",
+    "debug": "export CREATE_DEBUG=false && node ./debug.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package create-tpl",
+    "down": "node ./download.js",
+    "release": "node updateVersions"
+  },
+  "packageManager": "pnpm@7.29.0",
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/vitejs/vite/issues"
+  },
+  "homepage": "https://github.com/vitejs/vite/tree/main/packages/create-vite#readme",
+  "devDependencies": {
+    "execa": "^7.1.1",
+    "fs-extra": "^11.1.0",
+    "kolorist": "^1.7.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.0.2",
+    "unbuild": "^1.1.2",
+    "vitest": "^0.29.3"
+  },
+  "dependencies": {
+    "cross-spawn": "^7.0.3",
+    "minimist": "^1.2.8",
+    "prompts": "^2.4.2"
+  }
+}
