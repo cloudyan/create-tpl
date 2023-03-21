@@ -151,6 +151,7 @@ async function init() {
     template = `project-${template}`
   }
 
+  // 只有以 project- 开头的模板，才会清空目录
   if (overwrite && template.startsWith('project-')) {
     emptyDir(root)
   } else if (!fs.existsSync(root)) {
