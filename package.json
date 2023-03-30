@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "",
   "main": "debug.js",
-  "devDependencies": {
+  "dependencies": {
     "@changesets/cli": "^2.26.0",
     "lerna": "^6.6.1",
     "nx": "^15.8.9"
