@@ -20,37 +20,37 @@ export type Template = {
 
 export const TemplateList: Template[] = [
   {
-    type: 'project',
     name: 'project-vue',
     display: 'vue',
+    type: 'project',
     color: green,
   },
   {
-    type: 'project',
     name: 'project-vue-ts',
-    display: 'Vue-ts',
+    display: 'vue-ts',
+    type: 'project',
     color: blue,
   },
   {
+    name: 'lint',
+    display: 'config-lint',
     type: 'block',
-    name: 'config-lint',
-    display: 'Lint',
     color: yellow,
   },
   {
     type: 'block',
-    name: 'config-lock',
-    display: 'Lock',
+    name: 'deps-lock',
+    display: 'deps-lock',
     color: green,
   },
   {
-    name: 'md-source-code-analysis',
+    name: 'md-sca',
     display: 'md-source-code-analysis',
     color: yellow,
     type: 'block',
   },
   {
-    name: 'monorepo-by-lerna-pnpm',
+    name: 'lerna-pnpm',
     display: 'monorepo-by-lerna-pnpm',
     color: blue,
     type: 'block',
