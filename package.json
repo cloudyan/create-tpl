@@ -6,8 +6,8 @@
   "main": "debug.js",
   "dependencies": {
     "@changesets/cli": "^2.26.0",
-    "lerna": "^6.6.1",
-    "nx": "^15.8.9"
+    "lerna": "^6.4.1",
+    "nx": "^15.6.3"
   },
   "scripts": {
     "examples": "node ./packages/create-tpl ./app/examples/temp",
