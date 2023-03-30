@@ -2,10 +2,14 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "useWorkspaces": true,
   "npmClient": "pnpm",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "command": {
     "version": {
-      "allowBranch": ["master", "main", "release/*"],
+      "allowBranch": [
+        "master",
+        "main",
+        "release/*"
+      ],
       "conventionalCommits": true
     }
   }
