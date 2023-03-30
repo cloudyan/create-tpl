@@ -27,8 +27,7 @@
     "test-unit": "vitest run",
     "debug": "export CREATE_DEBUG=false && node ./debug.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s --commit-path . --lerna-package create-tpl",
-    "down": "node ./download.js",
-    "release": "node updateVersions"
+    "down": "node ./download.js"
   },
   "packageManager": "pnpm@7.29.0",
   "engines": {
@@ -52,5 +51,5 @@
     "minimist": "^1.2.8",
     "prompts": "^2.4.2"
   },
-  "gitHead": "29d95af13209cd60696f66b4737549d35fe89545"
+  "gitHead": "41eadf6d80e92e565f84b2e9ff7ef9807921c0d1"
 }
