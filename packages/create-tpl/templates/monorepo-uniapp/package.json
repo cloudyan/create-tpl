@@ -1,0 +1,49 @@
+{
+  "name": "uniapp-monorepo",
+  "private": true,
+  "version": "0.0.1",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "clear": "npx rimraf ./**/node_modules ./**/dist ./**/.umi",
+    "start": "lerna run start",
+    "demo": "lerna run dev --concurrency=10 --ignore=lowcodeui",
+    "lowcodeui": "lerna run dev --concurrency=10 --ignore=demo",
+    "build": "lerna run build --scope='@lowcodejs/*'",
+    "graph": "nx graph",
+    "doctor": "lerna run doctor",
+    "update": "pnpm up -r --workspace",
+    "prepare": "husky install && npm version",
+    "release:alpha": "npm run release -- --canary --force-publish",
+    "release:beta": "release:alpha -- --preid beta",
+    "release": "lerna publish --no-private --registry=https://registry.npmjs.org/",
+    "prettier": "prettier '*.{js,jsx,ts,tsx}' --check --cache",
+    "prettier:fix": "npm run prettier -- --write",
+    "test": ""
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
+    "husky": "^8.0.3",
+    "lerna": "^6.6.2",
+    "nx": "^15.9.4",
+    "prettier": "^2.8.4",
+    "rimraf": "^4.1.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "18.16.0",
+    "pnpm": "^8.5.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ]
+}

@@ -56,6 +56,12 @@ export const TemplateList: Template[] = [
     type: 'block',
   },
   {
+    name: 'monorepo-uniapp',
+    display: 'monorepo-uniapp',
+    color: blue,
+    type: 'block',
+  },
+  {
     type: 'other',
     name: 'others',
     display: 'Others',
