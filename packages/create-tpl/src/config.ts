@@ -32,15 +32,15 @@ export const TemplateList: Template[] = [
     color: blue,
   },
   {
-    name: 'lint',
+    name: 'config-lint',
     display: 'config-lint',
     type: 'block',
     color: yellow,
   },
   {
     type: 'block',
-    name: 'deps-lock',
-    display: 'deps-lock',
+    name: 'config-lock',
+    display: 'config-lock',
     color: green,
   },
   {
