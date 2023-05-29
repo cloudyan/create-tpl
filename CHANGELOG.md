@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/cloudyan/create-tpl/compare/v0.3.6...v0.5.0) (2023-05-14)
+
+
+### Features
+
+* update config ([cc208e7](https://github.com/cloudyan/create-tpl/commit/cc208e7fa7e3107f7a586bb5c30335d55e3a8b79))
+* update config ([9655eed](https://github.com/cloudyan/create-tpl/commit/9655eed5bf194545aa94600e4a4a15ae2e4133fa))
+
+
+
+
+
 # [0.4.0](https://github.com/cloudyan/create-tpl/compare/v0.3.6...v0.4.0) (2023-05-14)
 
 
